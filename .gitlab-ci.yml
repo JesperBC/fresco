@@ -20,26 +20,5 @@
 ## Our own for now
 include:
 - project: 'secata/pom/gitlab-ci'
-  file: 'git-version-setup.yml'
-  ref: v.2.51.0
-- project: 'secata/pom/gitlab-ci'
-  file: 'maven.yml'
-  ref: v.2.51.0
-
-
-.java-get-current-version: &java-get-current-version
-- '# shellcheck disable=SC2034'
-- CURRENT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-
-.java-set-new-version: &java-set-new-version
-- mvn versions:set -DnewVersion="$NEW_VERSION"
-
-java-deploy-test-version:
-  extends: .maven
-  stage: test
-  script:
-  - *java-get-current-version
-  - !reference [.beta-version-from-current, script]
-  - *java-set-new-version
-  - mvn -DskipTests -DadditionalJOption=-Xdoclint:none -Djib.skip deploy
-  allow_failure: true
+  file: 'web.yml'
+  ref: 'v.2.41.0'
