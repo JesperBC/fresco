@@ -74,6 +74,11 @@ public class SecureComputationEngineImpl
       ResourcePoolT resourcePool, Network network) {
     logger.info(
         "Running application: " + application + " using protocol suite: " + this.protocolSuite);
+    if (resourcePool.getMyId() == 1) {
+      // Catch new application is running
+      logger.trace(
+          "Running application " + application + " using protocol suite: " + this.protocolSuite);
+    }
     BuilderFactory<BuilderT> protocolFactory = this.protocolSuite.init(resourcePool);
     BuilderT builder = protocolFactory.createSequential();
     final DRes<OutputT> output = application.buildComputation(builder);

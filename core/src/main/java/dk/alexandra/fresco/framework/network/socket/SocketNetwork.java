@@ -174,6 +174,9 @@ public class SocketNetwork implements CloseableNetwork {
       }
       data = receivers.get(partyId).pollMessage(RECEIVE_TIMEOUT);
     }
+    if (conf.getMyId() == 1) {
+      logger.trace("Received {} bytes", data.length);
+    }
     return data;
   }
 
