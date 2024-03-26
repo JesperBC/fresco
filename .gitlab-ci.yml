@@ -19,8 +19,9 @@
 
 ## Our own for now
 include:
-- local: 'git-version-setup.yml'
-- local: 'version-bump.yml'
+- project: 'secata/pom'
+  file: 'git-version-setup.yml'
+  ref: v.2.51.0
 
 .java-get-current-version: &java-get-current-version
 - '# shellcheck disable=SC2034'
