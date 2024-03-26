@@ -19,7 +19,7 @@
 
 ## Our own for now
 include:
-- project: 'secata/pom'
+- project: 'secata/pom/gitlab-ci'
   file: 'git-version-setup.yml'
   ref: v.2.51.0
 
