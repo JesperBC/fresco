@@ -113,6 +113,12 @@
 		</plugins>
 	</build>
 
+	<distributionManagement>
+		<repository>
+			<id>secata</id>
+			<url>https://nexus.secata.com/repository/mvn/</url>
+		</repository>
+	</distributionManagement>
 	
 	<modules>
 		<module>core</module>
