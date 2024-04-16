@@ -179,10 +179,7 @@ public class SocketNetwork implements CloseableNetwork {
       }
       data = receivers.get(partyId).pollMessage(RECEIVE_TIMEOUT);
     }
-    if (partyId != conf.getMyId()) {
-      logger.trace("Received {} bytes", data.length);
-    }
-    // logger.trace("MyId {} Receive {} bytes", conf.getMyId(), data.length);
+    logger.trace("MyId {} Receive {} bytes", conf.getMyId(), data.length);
     return data;
   }
 
