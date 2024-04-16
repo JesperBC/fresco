@@ -3,19 +3,23 @@ package dk.alexandra.fresco.framework.network.socket;
 import dk.alexandra.fresco.framework.configuration.NetworkConfiguration;
 import dk.alexandra.fresco.framework.network.CloseableNetwork;
 import dk.alexandra.fresco.framework.util.ExceptionConverter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.net.ServerSocketFactory;
-import javax.net.SocketFactory;
 import java.io.IOException;
 import java.net.Socket;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import javax.net.ServerSocketFactory;
+import javax.net.SocketFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A {@link CloseableNetwork} implementation based on regular the {@link Socket} interface (i.e.,
@@ -138,7 +142,7 @@ public class SocketNetwork implements CloseableNetwork {
       final int id = entry.getKey();
       inRange(id);
       Socket socket = entry.getValue();
-      Receiver receiver = new Receiver(socket, conf.getMyId());
+      Receiver receiver = new Receiver(socket);
       this.receivers.put(id, receiver);
       Sender sender = new Sender(socket);
       this.senders.put(id, sender);
@@ -150,6 +154,7 @@ public class SocketNetwork implements CloseableNetwork {
     if (partyId == conf.getMyId()) {
       this.selfQueue.add(data);
     } else {
+      logger.trace("MyId {} Send {} bytes", conf.getMyId(), data.length);
       inRange(partyId);
       if (!senders.get(partyId).isRunning()) {
         throw new RuntimeException(
@@ -174,6 +179,10 @@ public class SocketNetwork implements CloseableNetwork {
       }
       data = receivers.get(partyId).pollMessage(RECEIVE_TIMEOUT);
     }
+    if (partyId != conf.getMyId()) {
+      logger.trace("Received {} bytes", data.length);
+    }
+    // logger.trace("MyId {} Receive {} bytes", conf.getMyId(), data.length);
     return data;
   }
 
