@@ -25,6 +25,7 @@ class Receiver {
   private final BlockingQueue<byte[]> queue;
   private final AtomicBoolean run;
   private final Thread thread;
+  private final int myId;
 
   /**
    * Create a new Receiver. This will start a separate thread listening for incoming messages.
@@ -32,6 +33,21 @@ class Receiver {
    * @param sock the channel receive messages on
    */
   Receiver(Socket sock) {
+    myId = -1;
+    Objects.requireNonNull(sock);
+    this.in = ExceptionConverter.safe(
+        () -> new DataInputStream(new BufferedInputStream(sock.getInputStream())),
+        "Unable to get inputstream from socket.");
+    this.queue = new LinkedBlockingQueue<>();
+    this.run = new AtomicBoolean(true);
+    this.thread = new Thread(this::run);
+    this.thread.setDaemon(true);
+    this.thread.setName("Receiver-" + this.thread.getId());
+    this.thread.start();
+  }
+
+  Receiver(Socket sock, int myId) {
+    this.myId = myId;
     Objects.requireNonNull(sock);
     this.in = ExceptionConverter.safe(
         () -> new DataInputStream(new BufferedInputStream(sock.getInputStream())),
@@ -87,6 +103,9 @@ class Receiver {
         if (length < 0) {
           run.set(false);
         } else {
+          if (myId == 1) {
+            logger.trace("Received {} bytes", length);
+          }
           byte[] msgBuf = new byte[length];
           this.in.readFully(msgBuf);
           queue.add(msgBuf);
