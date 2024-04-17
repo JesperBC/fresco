@@ -154,7 +154,7 @@ public class SocketNetwork implements CloseableNetwork {
     if (partyId == conf.getMyId()) {
       this.selfQueue.add(data);
     } else {
-      logger.trace("MyId {} Send {} bytes", conf.getMyId(), data.length);
+      logger.trace("MyId {} Send {} bytes at time {}", conf.getMyId(), data.length, System.currentTimeMillis());
       inRange(partyId);
       if (!senders.get(partyId).isRunning()) {
         throw new RuntimeException(
@@ -179,7 +179,7 @@ public class SocketNetwork implements CloseableNetwork {
       }
       data = receivers.get(partyId).pollMessage(RECEIVE_TIMEOUT);
     }
-    logger.trace("MyId {} Receive {} bytes", conf.getMyId(), data.length);
+    logger.trace("MyId {} Receive {} bytes at time {}", conf.getMyId(), data.length, System.currentTimeMillis());
     return data;
   }
 
