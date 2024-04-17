@@ -171,7 +171,7 @@ public class SocketNetwork implements CloseableNetwork {
     }
     inRange(partyId);
     byte[] data;
-    data = receivers.get(partyId).pollMessage(RECEIVE_TIMEOUT);
+    data = receivers.get(partyId).pollMessage(RECEIVE_TIMEOUT, conf.getMyId());
     if (data != null) {
       logger.trace("MyId {} Receive {} bytes at time {}", conf.getMyId(), data.length, System.currentTimeMillis());
     }
@@ -180,7 +180,7 @@ public class SocketNetwork implements CloseableNetwork {
         throw new RuntimeException("P" + conf.getMyId() + ": Unable to recieve from P" + partyId
             + ". Receiver not running");
       }
-      data = receivers.get(partyId).pollMessage(RECEIVE_TIMEOUT);
+      data = receivers.get(partyId).pollMessage(RECEIVE_TIMEOUT, conf.getMyId());
       logger.trace("MyId {} Receive {} bytes at time {}", conf.getMyId(), data.length, System.currentTimeMillis());
     }
     return data;
