@@ -77,9 +77,9 @@ class Receiver {
    */
   byte[] pollMessage(Duration timeout) {
     return ExceptionConverter.safe(() -> {
-          logger.info("Pulling receive message {}", System.currentTimeMillis());
+          logger.trace("Pulling receive message {}", System.currentTimeMillis());
           byte[] poll = queue.poll(timeout.toMillis(), TimeUnit.MILLISECONDS);
-          logger.info("Pulling done {}", System.currentTimeMillis());
+          logger.trace("Pulling done {}", System.currentTimeMillis());
           return poll;
         },
         "Receive interrupted");
