@@ -170,7 +170,7 @@ public class TestSocketNetwork extends AbstractCloseableNetworkTest {
       }
       Map<Integer, Socket> socketMap1 = fs.get(0).get().getSocketMap();
       Map<Integer, Socket> socketMap2 = fs.get(1).get().getSocketMap();
-      Receiver r = new Receiver(socketMap1.get(2));
+      Receiver r = new Receiver(socketMap1.get(2), 2);
       socketMap2.get(1).close();
     } finally {
       for (Future<NetworkConnector> futureConn : fs) {

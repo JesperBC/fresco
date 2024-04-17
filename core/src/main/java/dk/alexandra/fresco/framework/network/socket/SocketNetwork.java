@@ -142,7 +142,7 @@ public class SocketNetwork implements CloseableNetwork {
       final int id = entry.getKey();
       inRange(id);
       Socket socket = entry.getValue();
-      Receiver receiver = new Receiver(socket);
+      Receiver receiver = new Receiver(socket, conf.getMyId());
       this.receivers.put(id, receiver);
       Sender sender = new Sender(socket);
       this.senders.put(id, sender);
@@ -172,16 +172,14 @@ public class SocketNetwork implements CloseableNetwork {
     inRange(partyId);
     byte[] data;
     data = receivers.get(partyId).pollMessage(RECEIVE_TIMEOUT, conf.getMyId());
-    if (data != null) {
-      logger.trace("MyId {} Receive {} bytes at time {}", conf.getMyId(), data.length, System.currentTimeMillis());
-    }
+
     while (data == null) {
       if (!receivers.get(partyId).isRunning()) {
         throw new RuntimeException("P" + conf.getMyId() + ": Unable to recieve from P" + partyId
             + ". Receiver not running");
       }
       data = receivers.get(partyId).pollMessage(RECEIVE_TIMEOUT, conf.getMyId());
-      logger.trace("MyId {} Receive {} bytes at time {}", conf.getMyId(), data.length, System.currentTimeMillis());
+      //logger.trace("MyId {} Receive {} bytes at time {}", conf.getMyId(), data.length, System.currentTimeMillis());
     }
     return data;
   }
