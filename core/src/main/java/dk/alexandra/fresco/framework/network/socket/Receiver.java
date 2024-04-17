@@ -100,7 +100,7 @@ class Receiver {
         } else {
           byte[] msgBuf = new byte[length];
           this.in.readFully(msgBuf);
-          logger.trace("MyId {} Receive {} bytes at time {}", myId(), length, System.currentTimeMillis());
+          logger.trace("MyId {} Receive {} bytes at time {}", myId, length, System.currentTimeMillis());
           queue.add(msgBuf);
         }
       } catch (EOFException eof) {
