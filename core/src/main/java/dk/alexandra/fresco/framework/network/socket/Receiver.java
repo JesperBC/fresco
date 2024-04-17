@@ -76,7 +76,10 @@ class Receiver {
    * @return the message
    */
   byte[] pollMessage(Duration timeout) {
-    return ExceptionConverter.safe(() -> queue.poll(timeout.toMillis(), TimeUnit.MILLISECONDS),
+    return ExceptionConverter.safe(() -> {
+          logger.info("Pulling receive message {}", System.currentTimeMillis());
+          return queue.poll(timeout.toMillis(), TimeUnit.MILLISECONDS);
+        },
         "Receive interrupted");
   }
 
