@@ -22,6 +22,7 @@ class Sender {
   private final AtomicBoolean flushAndStop;
   private final AtomicBoolean ignoreNext;
   private final Thread thread;
+  private final int myId;
 
   /**
    * Creates a new sender on a given socket. This starts a separate thread for sending queued
@@ -29,12 +30,13 @@ class Sender {
    *
    * @param sock the socket to send over
    */
-  Sender(Socket sock) {
+  Sender(Socket sock, int myId) {
     Objects.requireNonNull(sock);
     this.out = ExceptionConverter.safe(
         () -> new DataOutputStream(new BufferedOutputStream(sock.getOutputStream())),
         "Unable to get output stream from socket");
     this.queue = new LinkedBlockingQueue<>();
+    this.myId = myId;
     this.flushAndStop = new AtomicBoolean(false);
     this.ignoreNext = new AtomicBoolean(false);
     this.thread = new Thread(this::run);
@@ -87,6 +89,7 @@ class Sender {
       while (shouldRun()) {
         byte[] data = queue.take();
         if (!ignoreNext.get()) {
+          logger.trace("MyId {} Send {} bytes at time {}", myId, data.length, System.currentTimeMillis());
           out.writeInt(data.length);
           out.write(data);
           out.flush();

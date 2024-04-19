@@ -170,7 +170,6 @@ public class TestSocketNetwork extends AbstractCloseableNetworkTest {
       }
       Map<Integer, Socket> socketMap1 = fs.get(0).get().getSocketMap();
       Map<Integer, Socket> socketMap2 = fs.get(1).get().getSocketMap();
-      Receiver r = new Receiver(socketMap1.get(2), 2);
       socketMap2.get(1).close();
     } finally {
       for (Future<NetworkConnector> futureConn : fs) {
@@ -226,7 +225,7 @@ public class TestSocketNetwork extends AbstractCloseableNetworkTest {
         fs.add(es.submit(() -> new Connector(confs.get(id), DEFAULT_CONNECTION_TIMEOUT)));
       }
       Map<Integer, Socket> socketMap = fs.get(0).get().getSocketMap();
-      Sender s = new Sender(socketMap.get(2));
+      Sender s = new Sender(socketMap.get(2), 2);
       socketMap.get(2).close();
       s.stop();
     } finally {
@@ -253,7 +252,7 @@ public class TestSocketNetwork extends AbstractCloseableNetworkTest {
       }
       Map<Integer, Socket> socketMap = fs.get(0).get().getSocketMap();
       Socket socket = socketMap.get(2);
-      Sender sender = new Sender(socket);
+      Sender sender = new Sender(socket, 2);
 
       socket.close();
       sender.queueMessage(new byte[1]);
