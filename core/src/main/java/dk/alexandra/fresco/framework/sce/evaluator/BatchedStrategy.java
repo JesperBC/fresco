@@ -53,9 +53,9 @@ public class BatchedStrategy<ResourcePoolT extends ResourcePool>
     Iterator<NativeProtocol<?, ResourcePoolT>> iterator = protocols.iterator();
     while (iterator.hasNext()) {
       NativeProtocol<?, ResourcePoolT> protocol = iterator.next();
-      logger.trace(protocol.getClass().getName());
       EvaluationStatus status = protocol.evaluate(round, rp, sceNetwork);
       if (status.equals(EvaluationStatus.IS_DONE)) {
+        logger.trace(protocol.getClass().getName());
         iterator.remove();
       }
     }

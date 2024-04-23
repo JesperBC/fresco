@@ -81,7 +81,6 @@ class Receiver {
   byte[] pollMessage(Duration timeout, int id) {
     return ExceptionConverter.safe(() -> {
       if (id == 1) {
-
         logger.trace("Pulling receive message {}", System.currentTimeMillis());
         byte[] poll = queue.poll(timeout.toMillis(), TimeUnit.MILLISECONDS);
         logger.trace("Pulling done {}", System.currentTimeMillis());
