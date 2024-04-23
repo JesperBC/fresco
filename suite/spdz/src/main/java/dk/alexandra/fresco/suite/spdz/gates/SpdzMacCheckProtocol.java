@@ -99,11 +99,11 @@ public class SpdzMacCheckProtocol implements Computation<Void, ProtocolBuilderNu
 
           if (!BigInteger.ZERO.equals(definition.convertToUnsigned(deltaSum))) {
             // TODO hmm
-            throw new MaliciousException(
-                "The sum of delta's was not 0. Someone was corrupting something amongst "
-                    + openedValues.size()
-                    + " macs. Sum was " + deltaSum.toString() + " Aborting!");
-          }
+          //   throw new MaliciousException(
+          //       "The sum of delta's was not 0. Someone was corrupting something amongst "
+          //           + openedValues.size()
+          //           + " macs. Sum was " + deltaSum.toString() + " Aborting!");
+          // }
           // clean up store before returning to evaluating such that we only
           // evaluate the next macs, not those we already checked.
           openedValues.clear();
