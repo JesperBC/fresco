@@ -9,6 +9,8 @@ import dk.alexandra.fresco.lib.common.math.AdvancedNumeric;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * MiMC encryption is a symmetric cipher which can be used to great effect when utilizing it within
@@ -26,6 +28,8 @@ public class MiMCEncryption implements Computation<SInt, ProtocolBuilderNumeric>
   private final MiMCRoundConstantFactory roundConstants;
   private static final Map<BigInteger, Integer> rounds = new HashMap<>();
   private static final BigInteger THREE = BigInteger.valueOf(3);
+
+  private static final Logger logger = LoggerFactory.getLogger(MiMCEncryption.class);
 
   /**
    * Implementation of the MiMC decryption protocol.
@@ -86,6 +90,7 @@ public class MiMCEncryption implements Computation<SInt, ProtocolBuilderNumeric>
         .whileLoop(
             (state) -> state.round < requiredRounds,
             (seq, state) -> {
+              logger.info("Im on round {}", state.round);
               /*
                * We're in an intermediate round where we compute c_{i} = (c_{i - 1} + K + r_{i})^{3} where K
                * is the symmetric key i is the reverse of the current round count r_{i} is the round
