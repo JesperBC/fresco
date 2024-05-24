@@ -114,13 +114,9 @@
 	</build>
 
 	<distributionManagement>
-		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
 		<repository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+			<id>secata</id>
+			<url>https://nexus.secata.com/repository/mvn/</url>
 		</repository>
 	</distributionManagement>
 
