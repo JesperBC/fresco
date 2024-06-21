@@ -1,45 +1,17 @@
-## Comment out FRESCO CI
-#variables:
-#  DOCKER_IMAGE: registry.gitlab.com/partisia/dockerimages/maven-jdk9:latest
-#
-#image: $DOCKER_IMAGE
-#
-#run-test:
-#  stage: build
-#  script:
-#    - mvn test
-#  artifacts:
-#    paths:
-#      - core/target/site/jacoco
-#      - suite/spdz/target/site/jacoco
-#      - suite/spdz2k/target/site/jacoco
-#      - suite/tinytables/target/site/jacoco
-#      - tools/mascot/target/site/jacoco
-#      - tools/ot/target/site/jacoco
+variables:
+  DOCKER_IMAGE: registry.gitlab.com/partisia/dockerimages/maven-jdk9:latest
 
-## Our own for now
-include:
-- project: 'secata/pom/gitlab-ci'
-  file: 'git-version-setup.yml'
-  ref: v.2.51.0
-- project: 'secata/pom/gitlab-ci'
-  file: 'maven.yml'
-  ref: v.2.51.0
+image: $DOCKER_IMAGE
 
-
-.java-get-current-version: &java-get-current-version
-- '# shellcheck disable=SC2034'
-- CURRENT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-
-.java-set-new-version: &java-set-new-version
-- mvn versions:set -DnewVersion="$NEW_VERSION"
-
-java-deploy-test-version:
-  extends: .maven
-  stage: test
+run-test:
+  stage: build
   script:
-  - *java-get-current-version
-  - !reference [.beta-version-from-current, script]
-  - *java-set-new-version
-  - mvn -DskipTests -DadditionalJOption=-Xdoclint:none -Djib.skip deploy
-  allow_failure: true
+    - mvn test
+  artifacts:
+    paths:
+      - core/target/site/jacoco
+      - suite/spdz/target/site/jacoco
+      - suite/spdz2k/target/site/jacoco
+      - suite/tinytables/target/site/jacoco
+      - tools/mascot/target/site/jacoco
+      - tools/ot/target/site/jacoco
